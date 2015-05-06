@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3" type="template">
+    <name>naprokat</name>
+    <creationDate>2014-10-07</creationDate>
+    <author>Sytnik Dmytro (VanArman)</author>
+    <authorEmail>dimaarman@gmail.com</authorEmail>
+    <copyright>VanArman 2014</copyright>
+    <license>GNU/GPL 2 or Later</license>
+    <version>1.0.0</version>
+    <description>
+        This template was programed by Dmytro Sytnik (VanArman).
+    </description>
+    <files>
+        <folder>images</folder>
+        <folder>html</folder>
+        <folder>js</folder>
+        <folder>css</folder>
+        <filename>index.php</filename>
+        <filename>index.html</filename>
+        <filename>templateDetails.xml</filename>
+    </files>
+    <positions>
+        <position>mainmenu</position>
+        <position>aside</position>
+		<position>footer-left</position>
+		<position>footer-center</position>
+   		<position>footer-right</position>
+    </positions>
+</extension>

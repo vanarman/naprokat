@@ -1,0 +1,47 @@
+@media(min-width: 1000px){
+    .navbar-collapse.collapse {
+        text-align: center; /* Set this */
+        /*display: block !important;*/
+        height: auto !important;
+        padding-bottom: 0;
+        /*overflow: visible !important;*/
+        margin-bottom: -5px;
+    }
+
+    .navbar {
+        margin-bottom: 0;
+    }
+
+    .navbar-nav {
+        display: inline-block;
+        float: none;
+        margin: 0;
+    }
+}
+
+.catItemHeader > h4.catItemTitle > a:hover {
+	text-decoration: none;
+}
+
+footer {
+	background-image: -webkit-linear-gradient(bottom,#fff 0,#f8f8f8 100%);
+	background-image: -o-linear-gradient(bottom,#fff 0,#f8f8f8 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,from(#fff),to(#f8f8f8));
+	background-image: linear-gradient(to top,#fff 0,#f8f8f8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffffffff', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+	background-repeat: repeat-x;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,.075),0 1px 5px rgba(255,255,255,.15);
+	box-shadow: inset 0 1px 0 rgba(0,0,0,.075),0 1px 5px rgba(255,255,255,.15);
+	padding-top: 15px;
+}
+
+.catItemExtraFieldsLabel {
+	font-weight: bold;
+}
+
+th.headTableEF {
+	font-size: 1.5em;
+	color: darkcyan;
+}
