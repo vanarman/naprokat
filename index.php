@@ -9,6 +9,14 @@
 			$this->_styleSheets[$this->baseurl.'/media/system/css/modal.css']
 	);
 	$doc = JFactory::getDocument();
+	if (isset($doc->_script['text/javascript'])){
+		$doc->_script['text/javascript'] =
+		preg_replace('%jQuery\(function\(\$\)\s*{\s*SqueezeBox\.initialize\(\s*{\}\);\s*SqueezeBox\.assign\(\$\(\'a\.modal\'\)\.get\(\),\s*{\s*parse:\s*\'rel\'\s*\}\);\s*\}\);\s*%', '', $doc->_script['text/javascript']);
+
+		if (empty($doc->_script['text/javascript'])) unset($doc->_script['text/javascript']);
+	}
+	if (isset($this->_script['text/javascript'])) { $this->_script['text/javascript'] = preg_replace('%window\.addEvent\    (\'load\',\s*function\(\)\s*{\s*new\s*JCaption\(\'img.caption\'\);\s*}\);\s*%',     '', $this->_script['text/javascript']);
+		if (empty($this->_script['text/javascript'])) unset($this->_script['text/javascript']);}
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -25,16 +33,22 @@
         $doc->addStyleSheet('/templates/naprokat/css/style.css');
 
         $doc->addScript('/templates/naprokat/js/bootstrap.min.js');
+		$doc->addScript('/templates/naprokat/js/bigSlide.min.js');
 
         $aSide = 12;
 		$divFooter = 0;
 		$footerExist = '
 			html, body {height: 100%; width: 100%; margin: 0px;}
-			.page {min-height: 100%; height: auto !important; height: 100%;}
+			.page {min-height: 100%; height: auto !important; height: 100%; margin-top: 20px;}
 			.wrap {padding-bottom: 100px;}
 			footer {height: 100px; margin-top: -100px;}';
 		$menuExist = '
-			body { padding-top: 70px; }';
+			@media(max-width: 1000px) {
+				body { padding-top: 70px; }
+			}
+			@media(min-width: 1001px) {
+				body { padding-top: 30px; }
+			}';
 	?>
 
 
@@ -48,19 +62,43 @@
 		<div class="container-fluid wrap">
 			<?php if ($this->countModules('mainmenu')) : ?>
 				<?php $doc->addStyleDeclaration($menuExist); ?>
+				<script>
+					jQuery.noConflict()(function ($) {
+						if ($( document ).width() >= 910 ) {
+							$('.navbar.push').remove();
+
+						} else if ($( document ).width() <=909 ) {
+							$('li.dropdown > a').attr("data-toggle", "dropdown");
+							$('<div class="row logo-row"><div class="col-md-12"><img src="/templates/naprokat/images/logo.jpg" alt="Напрокат Кемпинг актив" /></div></div>').prependTo('nav.navbar > div.container-fluid') ;
+						}
+					});
+				</script>
 				<nav class="navbar navbar-default navbar-fixed-top">
 				   <div class="container-fluid">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="collapse navbar-collapse">
-							<jdoc:include type="modules" name="mainmenu" style="default"/>
-						</div>
+				   		<div class="row"><div class="col-md-12">
+							<div class="navbar push">
+								<button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-collapse">
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
+								<div class="push pull-left">
+									<a href="#menu" type="button" data-toggle="collapse" class="navbar-toggle pull-right menu-link">
+										<div class="cam-menu">
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+											<span class="icon-bar"></span>
+										</div>
+										<span>Каталог</span>
+									</a>
+								</div>
+							</div>
+						</div></div>
 					</div>
+					<div class="collapse navbar-collapse">
+						<jdoc:include type="modules" name="mainmenu" style="default"/>
+					</div>
+
 				</nav>
 			<?php endif; ?>
 			<div class="row">
@@ -68,8 +106,17 @@
 					<div class="row">
 						<?php if ($this->countModules('aside')) : ?>
 							<?php $aSide = $aSide - 3; ?>
-							<aside class="col-md-3">
+							<aside class="col-md-3 panel" id="menu" role="navigation">
 								<jdoc:include type="modules" name="aside" style="default"/>
+								<script>
+									jQuery.noConflict()(function ($) {
+										if ($( document ).width() <= 909 ) {
+											$(document).ready(function() {
+												$('.menu-link').bigSlide();
+											});
+										}
+									});
+								</script>
 							</aside>
 						<?php endif; ?>
 						<section class="col-md-<?php echo $aSide; ?>">
