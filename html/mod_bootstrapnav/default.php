@@ -9,28 +9,10 @@
 //No Direct Access
 defined('_JEXEC') or die;
 ?>
-<?php if($use_css == 1) : ?>
-    <link rel="stylesheet" href="<?php echo JURI::base(); ?>media/mod_bootstrapnav/css/bootstrap.css" type="text/css" />
-<?php endif; ?>
-<?php //print_r($list); ?>
-<style>
-
-.navbar, .navbar .container{
-    background: <?php echo $background_color; ?> !important;
-}
-
-.navbar-nav > li > a{
-     color:<?php echo $text_color; ?> !important;
-     text-shadow: 0 0 0 !important;
-}
-
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus{
-     background: <?php echo $active_background_color; ?> !important;
-}
-</style>
+<?php //echo $list[0]->menutype; ?>
 <?php if($nav_type == 'navbar') : ?>
 
-    <ul class="nav navbar-nav <?php echo $float; ?>">
+    <ul class="<?php echo $list[0]->menutype; ?> nav navbar-nav <?php echo $float; ?>">
         <?php foreach ($list as $i => &$item) : ?>
         <?php
         $class = $item->id;

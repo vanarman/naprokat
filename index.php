@@ -15,8 +15,6 @@
 
 		if (empty($doc->_script['text/javascript'])) unset($doc->_script['text/javascript']);
 	}
-	if (isset($this->_script['text/javascript'])) { $this->_script['text/javascript'] = preg_replace('%window\.addEvent\    (\'load\',\s*function\(\)\s*{\s*new\s*JCaption\(\'img.caption\'\);\s*}\);\s*%',     '', $this->_script['text/javascript']);
-		if (empty($this->_script['text/javascript'])) unset($this->_script['text/javascript']);}
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -31,9 +29,11 @@
 		$doc->addStyleSheet('/templates/naprokat/css/bootstrap.min.css');
         $doc->addStyleSheet('/templates/naprokat/css/bootstrap-theme.min.css');
         $doc->addStyleSheet('/templates/naprokat/css/style.css');
+		$doc->addStyleSheet('/templates/naprokat/css/hover-min.css');
 
         $doc->addScript('/templates/naprokat/js/bootstrap.min.js');
 		$doc->addScript('/templates/naprokat/js/bigSlide.min.js');
+		$doc->addScript('/templates/naprokat/js/plugin.tabit.js');
 
         $aSide = 12;
 		$divFooter = 0;
@@ -43,12 +43,17 @@
 			.wrap {padding-bottom: 100px;}
 			footer {height: 100px; margin-top: -100px;}';
 		$menuExist = '
-			@media(max-width: 1000px) {
+			@media(max-width: 767px) {
 				body { padding-top: 70px; }
 			}
-			@media(min-width: 1001px) {
+			@media(min-width: 768px) {
 				body { padding-top: 30px; }
-			}';
+			}
+			@media(max-width: 320px) {
+				.page { margin-top: 0px !important;}
+				body { padding-top: 30px !important; }
+			}
+			';
 	?>
 
 
@@ -56,6 +61,30 @@
             <script src="/templates/naprokat/js/html5shiv.min.js" type="text/javascript"></script>
             <script src="/templates/naprokat/js/respond.min.js" type="text/javascript"></script>
     <![endif]-->
+    <script>
+		jQuery.noConflict()(function ($) {
+			$(document).ready(function(){
+				if ($('.col-md-8 > .catItemIntroText > p').length > 1) {
+					if ($('.col-md-8 > .catItemIntroText > p:not(:first)').is(':visible')) {
+						$('.col-md-8 > .catItemIntroText > p').hide();
+						$('.col-md-8 > .catItemIntroText > p').first().show();
+						$('.col-md-8 > .catItemIntroText').append('<button class="more">Весь текст...</button>')
+					}
+
+					$('button.more').on('click', function(){
+						if ($('.col-md-8 > .catItemIntroText > p:not(:first)').is(':visible')) {
+							$('.col-md-8 > .catItemIntroText > p:not(:first)').fadeToggle( "fast", "linear" );
+							$('.col-md-8 > .catItemIntroText > p:first').show();
+							$('.col-md-8 > .catItemIntroText > button.more').text('Весь текст...');
+						} else {
+							$('.col-md-8 > .catItemIntroText > p:not(:first)').fadeToggle( "slow", "linear" );
+							$('.col-md-8 > .catItemIntroText > button.more').text('Скрыть...');
+						}
+					});
+				}
+			});
+		});
+	</script>
 </head>
 <body>
 	<div class="page">
@@ -64,18 +93,28 @@
 				<?php $doc->addStyleDeclaration($menuExist); ?>
 				<script>
 					jQuery.noConflict()(function ($) {
-						if ($( document ).width() >= 910 ) {
-							$('.navbar.push').remove();
-
-						} else if ($( document ).width() <=909 ) {
+						$(window).resize(function(){
+							if($(window).width() <= 767){
+								$('li.dropdown > a').attr("data-toggle", "dropdown");
+								$('nav.navbar.navbar-default.navbar-fixed-top').find('div.container-fluid > .row > .col-md-12.controls').css('display', 'block');
+							} else {
+								$('li.dropdown > a').attr("data-toggle", "");
+								$('nav.navbar.navbar-default.navbar-fixed-top').find('div.container-fluid > .row > .col-md-12.controls').css('display', 'none');
+							}
+						});
+						if($(window).width() <= 767){
 							$('li.dropdown > a').attr("data-toggle", "dropdown");
-							$('<div class="row logo-row"><div class="col-md-12"><img src="/templates/naprokat/images/logo.jpg" alt="Напрокат Кемпинг актив" /></div></div>').prependTo('nav.navbar > div.container-fluid') ;
+							$('nav.navbar.navbar-default.navbar-fixed-top').find('div.container-fluid > .row > .col-md-12.controls').css('display', 'block');
+						} else {
+							$('li.dropdown > a').attr("data-toggle", "");
+							$('nav.navbar.navbar-default.navbar-fixed-top').find('div.container-fluid > .row > .col-md-12.controls').css('display', 'none');
 						}
 					});
 				</script>
 				<nav class="navbar navbar-default navbar-fixed-top">
-				   <div class="container-fluid">
-				   		<div class="row"><div class="col-md-12">
+					<div class="container-fluid">
+			   			<div class="row logo-row"><span class="logo"></span></div>
+				   		<div class="row"><div class="col-md-12 controls">
 							<div class="navbar push">
 								<button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-collapse">
 									<span class="icon-bar"></span>
@@ -83,7 +122,7 @@
 									<span class="icon-bar"></span>
 								</button>
 								<div class="push pull-left">
-									<a href="#menu" type="button" data-toggle="collapse" class="navbar-toggle pull-right menu-link">
+									<a href="#menu" type="button" class="navbar-toggle pull-right menu-link">
 										<div class="cam-menu">
 											<span class="icon-bar"></span>
 											<span class="icon-bar"></span>
@@ -106,20 +145,25 @@
 					<div class="row">
 						<?php if ($this->countModules('aside')) : ?>
 							<?php $aSide = $aSide - 3; ?>
-							<aside class="col-md-3 panel" id="menu" role="navigation">
+							<aside class="col-md-3 col-sm-3 panel" id="menu" role="navigation">
 								<jdoc:include type="modules" name="aside" style="default"/>
 								<script>
 									jQuery.noConflict()(function ($) {
-										if ($( document ).width() <= 909 ) {
-											$(document).ready(function() {
-												$('.menu-link').bigSlide();
-											});
-										}
+										if ($( document ).width() <= 767) {
+											$('.menu-link').bigSlide();
+										};
+										$(window).on('resize', function(){
+											if($(window).width() <= 767){
+												$('.menu-link').bigSlide('none');
+											} else {
+												$('aside#menu').attr('style','');
+											}
+										});
 									});
 								</script>
 							</aside>
 						<?php endif; ?>
-						<section class="col-md-<?php echo $aSide; ?>">
+						<section class="col-md-<?php echo $aSide; ?> col-sm-<?php echo $aSide; ?>">
 							<jdoc:include type="component" />
 						</section>
 					</div>

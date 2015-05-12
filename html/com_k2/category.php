@@ -10,6 +10,11 @@
 // no direct access
 defined('_JEXEC') or die;
 
+$doc = JFactory::getDocument();
+$accordeonExist = '
+				jQuery.noConflict()(function ($) {
+					$(".accordeon").collapsiblePanel();
+				});';
 ?>
 <!-- Start K2 Category Layout -->
 <div class="row itemListView<?php if($this->params->get('pageclass_sfx')) echo ' '.$this->params->get('pageclass_sfx'); ?>">
@@ -41,6 +46,13 @@ defined('_JEXEC') or die;
 				<?php endif; ?>
 
 				<?php if($this->params->get('catDescription')): ?>
+					<?php
+						$doc->addScript('/templates/naprokat/js/jquery.collapsiblepanel.js');
+						$doc->addScriptDeclaration($accordeonExist);
+					?>
+
+
+
 				<!-- Category description -->
 				<p><?php echo $this->category->description; ?></p>
 				<?php endif; ?>
@@ -94,19 +106,22 @@ defined('_JEXEC') or die;
 
 		<?php if((isset($this->leading) || isset($this->primary) || isset($this->secondary) || isset($this->links)) && (count($this->leading) || count($this->primary) || count($this->secondary) || count($this->links))): ?>
 		<!-- Item list -->
-		<div class="itemList col-md-12">
+		<div class="itemList row">
 			<?php if(isset($this->leading) && count($this->leading)): ?>
 			<!-- Leading items -->
-			<div id="itemListLeading" class="row">
-				<?php foreach($this->leading as $key=>$item): ?>
-				<div class="itemContainer <?php echo (count($this->leading)==1) ? 'row' : 'col-md-'.number_format(12/$this->params->get('num_leading_columns'), 0).'"'; ?>">
-					<?php
-						// Load category_item.php by default
-						$this->item=$item;
-						echo $this->loadTemplate('item');
-					?>
+			<div id="itemListLeading" class="col-md-12">
+				<div class="row">
+					<?php foreach($this->leading as $key=>$item): ?>
+					<div class="itemContainer <?php echo (count($this->leading)==1) ? 'row' : 'col-md-'.number_format(12/$this->params->get('num_leading_columns'), 0).'"'; ?>">
+						<?php
+							// Load category_item.php by default
+							$this->item=$item;
+							echo $this->loadTemplate('item');
+						?>
+					</div>
+					<hr class="col-md-12" />
+					<?php endforeach; ?>
 				</div>
-				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
 		</div>

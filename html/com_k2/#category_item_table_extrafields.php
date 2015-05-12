@@ -141,29 +141,25 @@ K2HelperUtilities::setDefaultImage($this->item, 'itemlist', $this->params);
 	  <?php if($this->item->params->get('catItemExtraFields') && count($this->item->extra_fields)): ?>
 	  <!-- Item extra fields -->
 	  <div class="catItemExtraFields">
-	  		<script>
-				jQuery.noConflict()(function ($) {
-					$(".tab<?php echo $this->item->id; ?>").tabIt();
-				});
-			</script>
 	  	<!--<h4><?php echo JText::_('K2_ADDITIONAL_INFO'); ?></h4>-->
 			<?php foreach ($this->item->extra_fields as $key=>$extraField): ?>
 			<?php if($extraField->value != ''): ?>
 				<?php if($extraField->type == 'header'): ?>
-					<div class="tab<?php echo $this->item->id; ?>" data-tab-title="<?php echo $extraField->name; ?>">
-						<table class="table table-hover group<?php echo $extraField->group; ?>">
-							<tbody>
-							<?php foreach ($this->item->extra_fields as $key=>$extraFieldByGroup): ?>
-								<?php if ($extraFieldByGroup->group == $extraField->group && $extraFieldByGroup->type != 'header') : ?>
-									<tr class="">
-										<td class="catItemExtraFieldsLabel"><?php echo $extraFieldByGroup->name; ?>:</td>
-										<td class="catItemExtraFieldsValue"><?php echo $extraFieldByGroup->value; ?></td>
-									</tr>
-								<?php endif; ?>
-							<?php endforeach; ?>
-							</tbody>
-						</table>
-		  			</div>
+					<table class="table table-hover group<?php echo $extraField->group; ?>">
+						<thead>
+							<tr class=""><th colspan="2" class="list-group-item-heading headTableEF"><?php echo $extraField->name; ?></th></tr>
+						</thead>
+						<tbody>
+						<?php foreach ($this->item->extra_fields as $key=>$extraFieldByGroup): ?>
+							<?php if ($extraFieldByGroup->group == $extraField->group && $extraFieldByGroup->type != 'header') : ?>
+								<tr class="">
+									<td class="catItemExtraFieldsLabel"><?php echo $extraFieldByGroup->name; ?>:</td>
+									<td class="catItemExtraFieldsValue"><?php echo $extraFieldByGroup->value; ?></td>
+								</tr>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
 				<?php endif; ?>
 			<?php endif; ?>
 			<?php endforeach; ?>
